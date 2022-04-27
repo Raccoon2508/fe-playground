@@ -1,0 +1,23 @@
+<div class="main-title-container">
+    <h1 class="main-title">Observables</h1>
+</div>
+<div class="content-wrapper">
+    <div *ngIf="blockNumber === 1" class="content-container">
+        <div class="card promise-card">
+            <h2>Promise:</h2>
+            <button (click)="startPromise()">Start promise</button>
+            <div>
+                <span *ngIf="promiseResult">{{promiseResult}}</span>
+            </div>
+        </div>
+        <div class="card observable-card">
+            <h2>Observable:</h2>
+            <button (click)="startSwissTime()">Subscribe</button>
+            <button (click)="unsubscribe()">Unsubscribe</button>
+            <div>
+                <h3 *ngIf="swissTime">{{swissTime | date: 'hh:mm:ss'}}</h3>
+                <h3 *ngIf="!swissTime">-</h3>
+            </div>
+        </div>
+    </div>
+</div>
