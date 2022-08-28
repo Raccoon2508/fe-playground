@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AsyncSubject, interval, Observable, Observer, of, Subject, timer, ReplaySubject, BehaviorSubject, observable, Subscriber } from 'rxjs';
-import { bufferCount, takeUntil, take, filter, map, scan } from 'rxjs/operators'
+import { Component, OnDestroy } from '@angular/core';
+import { AsyncSubject, interval, Observable, Subject, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { takeUntil, take, filter, map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { PromiseService } from './services/promise.service';
 import { SwissTimeService } from './services/swiss-time.service';
@@ -8,122 +8,122 @@ import { ObservablesService } from './services/observables.service';
 import { SubjectsService } from './services/subjects.service';
 
 @Component({
-  selector: 'app-observables',
-  templateUrl: './observables.component.html',
-  styleUrls: ['./observables.component.scss'],
+    selector: 'app-observables',
+    templateUrl: './observables.component.html',
+    styleUrls: ['./observables.component.scss'],
 })
-export class ObservablesComponent {
+export class ObservablesComponent implements OnDestroy {
 
-  isStarted: boolean = false;
-  promiseResult: any = '-';
-  swissTime: Date;
-  blockNumber = 1;
-  unsubscriber$: Subject<void> = new Subject<void>();
+    isStarted = false;
+    promiseResult: string | number = '-';
+    swissTime: Date;
+    blockNumber = 1;
+    unsubscriber$: Subject<void> = new Subject<void>();
 
-  firstObserverValue: number[] = [];
-  secondObserverValue: number[] = [];
+    firstObserverValue: number[] = [];
+    secondObserverValue: number[] = [];
 
-  constructor(
-    protected promiseService: PromiseService,
-    protected swissTimeService: SwissTimeService,
-    protected observablesService: ObservablesService,
-    protected subjectsService: SubjectsService
-  ) { }
+    exampleSubjectFirstArray: number[] = [];
+    exampleSubjectSecondArray: number[] = [];
+    exampleSubject$: Subject<number> = new Subject<number>();
 
-  startPromise = () => this.promiseService.simplePromise$().then(data => this.promiseResult = data);
+    exampleReplaySubjectFirstArray: number[] = [];
+    exampleReplaySubjectSecondArray: number[] = [];
+    replaySubjectCount = 1;
+    exampleReplaySubject$: ReplaySubject<number>;
 
-  startSwissTime(): void {
-    this.swissTimeService.swissTimeObservable$().pipe(takeUntil(this.unsubscriber$)).subscribe(date => this.swissTime = date);
-  }
+    initialBehaviorSubject = 1;
+    exampleBehaviorSubjectFirstArray: number[] = [];
+    exampleBehaviorSubjectSecondArray: number[] = [];
+    exampleBehaviorSubject$: BehaviorSubject<number>;
 
-  startObservableExample(): void {
-    const {firstStream$, secondStream$} = this.observablesService.observableExample$();
-    firstStream$.subscribe(data => this.firstObserverValue = data);
-    secondStream$.subscribe(data => this.secondObserverValue = data);
-  }
+    exampleAsyncSubject$: AsyncSubject<number> = new AsyncSubject<number>();
+    exampleAsyncSubjectFirstArray: number[] = [];
+    exampleAsyncSubjectSecondArray: number[] = [];
+    exampleAsyncSubjectTime = 0;
+    exampleAsyncCurrentValueObservable: Subscription;
+    exampleAsyncCurrentValueObservableAsync$: Observable<number>;
 
-  exampleSubjectFirstArray: number[] = [];
-  exampleSubjectSecondArray: number[] = [];
-  exampleSubject$: Subject<number> = new Subject<number>();
+    pipesObservable$: Subject<number> = new Subject();
+    pipesCurrentValue = 0;
+    filterPipe: number[] = [];
+    takePipe: number[] = [];
+    mapPipe: number[] = [];
+    scanPipe: number[] = [];
 
-  startSubject(): void {
-    const {firstSubjectStream$, secondSubjectStream$} = this.subjectsService.exampleSubject$();
-    firstSubjectStream$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => {this.exampleSubjectFirstArray = data; console.log(data);});
-    secondSubjectStream$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleSubjectSecondArray = data);
-  }
+    someExampleObservable: Observable<number>;
+    someExampleValuesArray = [];
 
-  exampleReplaySubjectFirstArray: number[] = [];
-  exampleReplaySubjectSecondArray: number[] = [];
-  replaySubjectCount = 1;
-  exampleReplaySubject$: ReplaySubject<number>
+    constructor(
+        protected promiseService: PromiseService,
+        protected swissTimeService: SwissTimeService,
+        protected observablesService: ObservablesService,
+        protected subjectsService: SubjectsService
+    ) { }
 
-  startReplaySubject() {
-    this.exampleReplaySubject$ = new ReplaySubject<number>(this.replaySubjectCount);
-    interval(1000).pipe(takeUntil(this.unsubscriber$)).subscribe(this.exampleReplaySubject$);
+    startPromise = (): Promise<string> => this.promiseService.simplePromise$().then((data: number)=> this.promiseResult = `${data}`);
 
-    this.exampleReplaySubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleReplaySubjectFirstArray.push(data));
-    setTimeout(() => this.exampleReplaySubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleReplaySubjectSecondArray.push(data)), 4000);
-  }
+    startSwissTime(): void {
+        this.swissTimeService.swissTimeObservable$().pipe(takeUntil(this.unsubscriber$)).subscribe(date => this.swissTime = date);
+    }
 
-  initialBehaviorSubject: number = 1;
-  exampleBehaviorSubjectFirstArray: number[] = [];
-  exampleBehaviorSubjectSecondArray: number[] = [];
-  exampleBehaviorSubject$: BehaviorSubject<number>;
+    startObservableExample(): void {
+        const {firstStream$, secondStream$} = this.observablesService.observableExample$();
+        firstStream$.subscribe(data => this.firstObserverValue = data);
+        secondStream$.subscribe(data => this.secondObserverValue = data);
+    }
 
+    startSubject(): void {
+        const {firstSubjectStream$, secondSubjectStream$} = this.subjectsService.exampleSubject$();
+        firstSubjectStream$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => {
+            this.exampleSubjectFirstArray = data; console.log(data);
+        });
+        secondSubjectStream$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleSubjectSecondArray = data);
+    }
 
-  startBehaviorSubject(initialValue: number) {
-    const exampleBehaviorSubject$ = this.subjectsService.startBehaviorSubject(initialValue);
-    exampleBehaviorSubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleBehaviorSubjectFirstArray.push(data));
-    exampleBehaviorSubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleBehaviorSubjectSecondArray.push(data));
-  }
+    startReplaySubject(): void {
+        this.exampleReplaySubject$ = new ReplaySubject<number>(this.replaySubjectCount);
+        interval(1000).pipe(takeUntil(this.unsubscriber$)).subscribe(this.exampleReplaySubject$);
 
-  exampleAsyncSubject$: AsyncSubject<number> = new AsyncSubject<number>()
-  exampleAsyncSubjectFirstArray: number[] = [];
-  exampleAsyncSubjectSecondArray: number[] = [];
-  exampleAsyncSubjectTime: number = 0;
-  exampleAsyncCurrentValueObservable: Subscription;
-  exampleAsyncCurrentValueObservableAsync$: Observable<number>;
+        this.exampleReplaySubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleReplaySubjectFirstArray.push(data));
+        setTimeout(() => this.exampleReplaySubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleReplaySubjectSecondArray.push(data)), 4000);
+    }
 
-  startAsyncSubject() {
-    interval(1000).pipe(takeUntil(this.unsubscriber$)).subscribe(this.exampleAsyncSubject$);
-    this.exampleAsyncCurrentValueObservable = interval(1000).subscribe(data => this.exampleAsyncSubjectTime = data);
-    this.exampleAsyncCurrentValueObservableAsync$ = interval(1000);
+    startBehaviorSubject(initialValue: number): void {
+        const exampleBehaviorSubject$ = this.subjectsService.startBehaviorSubject(initialValue);
+        exampleBehaviorSubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleBehaviorSubjectFirstArray.push(data));
+        exampleBehaviorSubject$.pipe(take(5), takeUntil(this.unsubscriber$)).subscribe(data => this.exampleBehaviorSubjectSecondArray.push(data));
+    }
 
-    this.exampleAsyncSubject$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleAsyncSubjectFirstArray.push(data));
-    this.exampleAsyncSubject$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleAsyncSubjectSecondArray.push(data));
-  }
+    startAsyncSubject(): void {
+        interval(1000).pipe(takeUntil(this.unsubscriber$)).subscribe(this.exampleAsyncSubject$);
+        this.exampleAsyncCurrentValueObservable = interval(1000).subscribe(data => this.exampleAsyncSubjectTime = data);
+        this.exampleAsyncCurrentValueObservableAsync$ = interval(1000);
 
-  completeAsyncSubject() {
-    this.exampleAsyncSubject$.complete();
-    this.exampleAsyncCurrentValueObservable.unsubscribe();
-  }
+        this.exampleAsyncSubject$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleAsyncSubjectFirstArray.push(data));
+        this.exampleAsyncSubject$.pipe(takeUntil(this.unsubscriber$)).subscribe(data => this.exampleAsyncSubjectSecondArray.push(data));
+    }
 
-  pipesObservable$: Subject<number> = new Subject();
-  pipesCurrentValue = 0;
-  filterPipe: number[] = [];
-  takePipe: number[] = [];
-  mapPipe: number[] = [];
-  scanPipe: number[] = [];
+    completeAsyncSubject(): void {
+        this.exampleAsyncSubject$.complete();
+        this.exampleAsyncCurrentValueObservable.unsubscribe();
+    }
 
-  startPipes() {
-    interval(1000).pipe(takeUntil(this.unsubscriber$), take(10)).subscribe(this.pipesObservable$);
+    startPipes(): void {
+        interval(1000).pipe(takeUntil(this.unsubscriber$), take(10)).subscribe(this.pipesObservable$);
 
-    this.pipesObservable$.subscribe(data => this.pipesCurrentValue = data); //without pipes
-    this.pipesObservable$.pipe(filter(data => !!data)).subscribe(data => this.filterPipe.push(data));
-    this.pipesObservable$.pipe(take(3)).subscribe(data => this.takePipe.push(data));
-    this.pipesObservable$.pipe(map(item => item * item)).subscribe(data => this.mapPipe.push(data));
-  }
+        this.pipesObservable$.subscribe(data => this.pipesCurrentValue = data); // without pipes
+        this.pipesObservable$.pipe(filter(data => !!data)).subscribe(data => this.filterPipe.push(data));
+        this.pipesObservable$.pipe(take(3)).subscribe(data => this.takePipe.push(data));
+        this.pipesObservable$.pipe(map(item => item * item)).subscribe(data => this.mapPipe.push(data));
+    }
 
-  unsubscribe(): void {
-    this.unsubscriber$.next();
-  }
+    unsubscribe(): void {
+        this.unsubscriber$.next();
+    }
 
-  someExampleObservable: Observable<number>;
-  someExampleValuesArray = [];
-
-  ngOnDestroy(): void {
-    this.unsubscriber$.next();
-    this.unsubscriber$.complete();
-  }
-
+    ngOnDestroy(): void {
+        this.unsubscriber$.next();
+        this.unsubscriber$.complete();
+    }
 }

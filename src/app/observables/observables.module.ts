@@ -5,13 +5,13 @@ import { ObservablesRoutingModule } from './observables-routing.module';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [ObservablesComponent],
-  imports: [
-    ObservablesRoutingModule,
-    FormsModule,
-    CommonModule
-  ],
-  providers: [],
-  bootstrap: []
+    declarations: [ObservablesComponent],
+    imports: [
+        ObservablesRoutingModule,
+        FormsModule,
+        CommonModule
+    ],
+    providers: [],
+    bootstrap: []
 })
 export class ObservablesModule { }

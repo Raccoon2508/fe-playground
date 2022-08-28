@@ -7,16 +7,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavMenuComponent } from './shared/components/nav-menu/nav-menu.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavMenuComponent
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        AppRoutingModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
