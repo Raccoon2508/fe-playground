@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NavMenuComponent } from './shared/components/nav-menu/nav-menu.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material/angular-material.module';
 
 @NgModule({
     declarations: [
@@ -14,8 +16,11 @@ import { NavMenuComponent } from './shared/components/nav-menu/nav-menu.componen
     imports: [
         BrowserModule,
         FormsModule,
-        AppRoutingModule
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule
     ],
+    exports: [MaterialModule],
     providers: [],
     bootstrap: [AppComponent]
 })

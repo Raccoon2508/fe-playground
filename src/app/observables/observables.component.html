@@ -6,15 +6,15 @@
          class="content-container">
          <div class="card promise-card">
             <h2>Promise</h2>
-            <button (click)="startPromise()">Start promise</button>
+            <button mat-raised-button color="primary" (click)="startPromise()">Start promise</button>
             <h3>
                 <span *ngIf="promiseResult">{{promiseResult}}</span>
             </h3>
         </div>
         <div class="card observable-card">
             <h2>Observable + Date + pipe</h2>
-            <button (click)="startSwissTime()">Subscribe</button>
-            <button (click)="unsubscribe()">Unsubscribe</button>
+            <button mat-raised-button color="primary" (click)="startSwissTime()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="unsubscribe()">Unsubscribe</button>
             <div>
                 <h3 *ngIf="swissTime">{{swissTime | date: 'hh:mm:ss'}}</h3>
                 <h3 *ngIf="!swissTime">-</h3>
@@ -22,7 +22,7 @@
         </div>
         <div class="card observable-card">
             <h2>Observable</h2>
-            <button (click)="startObservableExample()">Start observable</button>
+            <button mat-raised-button color="primary" (click)="startObservableExample()">Start observable</button>
             <div class="example-line">
                 <span>First subscription: </span><span *ngFor="let item of firstObserverValue">{{item}}, </span>
                 <span *ngIf="!firstObserverValue.length">-</span>
@@ -34,8 +34,8 @@
         </div>
         <div class="card observable-card">
             <h2>Subject</h2>
-            <button (click)="startSubject()">Subscribe</button>
-            <button (click)="unsubscribe()">Unsubscribe</button>
+            <button mat-raised-button color="primary" (click)="startSubject()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="unsubscribe()">Unsubscribe</button>
             <div class="example-line">
                 <span>First subscription: </span><span *ngFor="let item of exampleSubjectFirstArray">{{item}}, </span>
                 <span *ngIf="!exampleSubjectFirstArray.length">-</span>
@@ -47,8 +47,8 @@
         </div>
         <div class="card observable-card">
             <h2>Replay Subject</h2>
-            <button (click)="startReplaySubject()">Subscribe</button>
-            <button (click)="unsubscribe()">Unsubscribe</button>
+            <button mat-raised-button color="primary" (click)="startReplaySubject()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="unsubscribe()">Unsubscribe</button>
             <label>Replay count: <input type="number" [(ngModel)]="replaySubjectCount"></label>
             <div class="example-line">
                 <span>First subscription: </span><span *ngFor="let item of exampleReplaySubjectFirstArray">{{item}}, </span>
@@ -61,8 +61,8 @@
         </div>
         <div class="card observable-card">
             <h2>Behavior Subject</h2>
-            <button (click)="startBehaviorSubject(initialValue.value)">Subscribe</button>
-            <button (click)="unsubscribe()">Unsubscribe</button>
+            <button mat-raised-button color="primary" (click)="startBehaviorSubject(initialValue.value)">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="unsubscribe()">Unsubscribe</button>
             <label>Initial value: <input type="number" #initialValue></label>
             <div class="example-line">
                 <span>First subscription: </span><span *ngFor="let item of exampleBehaviorSubjectFirstArray">{{item}}, </span>
@@ -75,8 +75,8 @@
         </div>
         <div class="card observable-card">
             <h2>Async Subject</h2>
-            <button (click)="startAsyncSubject()">Subscribe</button>
-            <button (click)="completeAsyncSubject()">Complete</button>
+            <button mat-raised-button color="primary" (click)="startAsyncSubject()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="completeAsyncSubject()">Complete</button>
             <div class="example-line">
                 <span>Current flow value: </span><span>{{exampleAsyncSubjectTime}}</span><br/>
                 <span>Current flow value (async): </span><span>{{exampleAsyncCurrentValueObservableAsync$ | async}}</span>
@@ -92,8 +92,8 @@
         </div>
         <div class="card observable-card">
             <h2>Pipes</h2>
-            <button (click)="startPipes()">Subscribe</button>
-            <button (click)="unsubscribe()">Complete</button>
+            <button mat-raised-button color="primary" (click)="startPipes()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="unsubscribe()">Complete</button>
             <div class="example-line">
                 <span>Current flow value: </span><span>{{pipesCurrentValue}}</span><br/>
             </div>
@@ -116,8 +116,8 @@
         </div>
         <div class="card observable-card">
             <h2>Examples Card</h2>
-            <button (click)="examplesCard()">Subscribe</button>
-            <button (click)="completeAsyncSubject()">Complete</button>
+            <button mat-raised-button color="primary" (click)="examplesCard()">Subscribe</button>
+            <button mat-raised-button color="warn" (click)="completeAsyncSubject()">Complete</button>
             <div class="example-line">
                 <span>Example: </span><span *ngFor="let item of someExampleValuesArray">{{item}}, </span>
                 <span *ngIf="!someExampleValuesArray.length">-</span>

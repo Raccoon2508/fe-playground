@@ -1,0 +1,16 @@
+[
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["PUT", "POST", "DELETE"],
+    "AllowedOrigins": ["https://*.amazonaws.com"],
+    "ExposeHeaders": [],
+    "MaxAgeSeconds": 0
+  },
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["GET"],
+    "AllowedOrigins": ["*"],
+    "ExposeHeaders": [],
+    "MaxAgeSeconds": 0
+  }
+]

@@ -10,7 +10,7 @@ import { SubjectsService } from './services/subjects.service';
 @Component({
     selector: 'app-observables',
     templateUrl: './observables.component.html',
-    styleUrls: ['./observables.component.scss'],
+    styleUrls: ['./observables.component.scss']
 })
 export class ObservablesComponent implements OnDestroy {
 
